@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carlos Montesdeoca — Dev Blog</title>
+  <style>
+    :root {
+      --bg:       #f9fafb;
+      --surface:  #ffffff;
+      --border:   #e5e7eb;
+      --text:     #111827;
+      --muted:    #6b7280;
+      --accent:   #7c3aed;
+      --accent2:  #a78bfa;
+      --tag-bg:   #ede9fe;
+      --tag-text: #5b21b6;
+      --code-bg:  #1e1b4b;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── TOP BAR ──────────────────────────────────────── */
+    .topbar {
+      background: var(--code-bg);
+      border-bottom: 1px solid rgba(167,139,250,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      height: 52px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .topbar-brand {
+      font-family: 'Courier New', monospace;
+      font-size: 0.95rem;
+      color: var(--accent2);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .topbar-brand span { color: #f472b6; }
+
+    .topbar-nav { display: flex; gap: 4px; }
+
+    .topbar-nav a {
+      color: rgba(255,255,255,0.6);
+      font-size: 0.8rem;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: background 0.15s, color 0.15s;
+      text-decoration: none;
+    }
+
+    .topbar-nav a:hover { background: rgba(167,139,250,0.2); color: var(--accent2); }
+
+    /* ── HERO ─────────────────────────────────────────── */
+    .hero {
+      background: var(--code-bg);
+      padding: 56px 32px 48px;
+      border-bottom: 3px solid var(--accent);
+    }
+
+    .hero-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .avatar {
+      width: 96px; height: 96px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #ec4899);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
+      border: 3px solid var(--accent2);
+      box-shadow: 0 0 0 6px rgba(124,58,237,0.2);
+    }
+
+    .hero-text { flex: 1; }
+
+    .hero-eyebrow {
+      font-family: 'Courier New', monospace;
+      font-size: 0.78rem;
+      color: #f472b6;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .hero-name {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.1;
+      margin-bottom: 10px;
+    }
+
+    .hero-name em {
+      font-style: normal;
+      background: linear-gradient(to right, var(--accent2), #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-bio {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.65);
+      max-width: 520px;
+      margin-bottom: 20px;
+    }
+
+    .hero-links { display: flex; flex-wrap: wrap; gap: 10px; }
+
+    .hero-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(167,139,250,0.4);
+      color: var(--accent2);
+      background: rgba(124,58,237,0.1);
+      text-decoration: none;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .hero-link:hover {
+      background: rgba(124,58,237,0.25);
+      border-color: var(--accent2);
+      text-decoration: none;
+    }
+
+    .hero-link svg { width: 13px; height: 13px; fill: currentColor; }
+
+    .hero-link.whatsapp { border-color: rgba(37,211,102,0.4); color: #4ade80; background: rgba(37,211,102,0.08); }
+    .hero-link.whatsapp:hover { background: rgba(37,211,102,0.18); border-color: #4ade80; }
+
+    /* ── LAYOUT ───────────────────────────────────────── */
+    .layout {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 48px 24px;
+      display: grid;
+      grid-template-columns: 1fr 260px;
+      gap: 40px;
+      align-items: start;
+    }
+
+    /* ── SECTION ──────────────────────────────────────── */
+    .section { margin-bottom: 48px; }
+    .section:last-child { margin-bottom: 0; }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .section-tag {
+      font-family: 'Courier New', monospace;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      padding: 3px 10px;
+      border-radius: 4px;
+    }
+
+    .section-line { flex: 1; height: 1px; background: var(--border); }
+
+    /* ── BLOG POST CARD ───────────────────────────────── */
+    .post-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin-bottom: 16px;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .post-card.visible { opacity: 1; transform: translateY(0); }
+    .post-card:hover { border-color: var(--accent2); box-shadow: 0 4px 20px rgba(124,58,237,0.1); }
+
+    .post-meta {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .post-date {
+      font-family: 'Courier New', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .post-dot { color: var(--border); }
+
+    .post-badge {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+    }
+
+    .post-badge.current { background: #d1fae5; color: #065f46; }
+    .post-badge.cert    { background: #fef3c7; color: #92400e; }
+
+    .post-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .post-company {
+      font-size: 0.85rem;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .post-company a { color: inherit; }
+    .post-company a:hover { text-decoration: underline; }
+
+    .post-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 14px;
+    }
+
+    .post-list li {
+      font-size: 0.86rem;
+      color: #374151;
+      padding-left: 16px;
+      position: relative;
+    }
+
+    .post-list li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 0.75rem;
+      top: 2px;
+    }
+
+    .post-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+    .ptag {
+      font-size: 0.72rem;
+      padding: 3px 9px;
+      border-radius: 4px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* ── ABOUT CARD ───────────────────────────────────── */
+    .about-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 28px;
+      font-size: 0.9rem;
+      color: #374151;
+      line-height: 1.8;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .about-card.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── SIDEBAR ──────────────────────────────────────── */
+    .sidebar { display: flex; flex-direction: column; gap: 24px; }
+
+    .widget {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 22px;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .widget.visible { opacity: 1; transform: translateY(0); }
+
+    .widget-title {
+      font-family: 'Courier New', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Skills */
+    .skill-group-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent2);
+      margin: 14px 0 8px;
+    }
+
+    .skill-group-label:first-child { margin-top: 0; }
+
+    .skill-row { margin-bottom: 9px; }
+    .skill-row:last-child { margin-bottom: 0; }
+
+    .skill-name {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .skill-name span { color: var(--accent); font-size: 0.75rem; font-weight: 500; }
+
+    .skill-track {
+      height: 5px;
+      background: var(--bg);
+      border-radius: 3px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .skill-bar {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(to right, var(--accent), var(--accent2));
+      width: 0;
+      transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Contact */
+    .contact-list { display: flex; flex-direction: column; gap: 6px; }
+
+    .contact-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.83rem;
+      color: var(--text);
+      text-decoration: none;
+      padding: 8px 10px;
+      border-radius: 8px;
+      transition: background 0.15s;
+    }
+
+    .contact-row:hover { background: var(--bg); text-decoration: none; }
+    .contact-row svg { width: 15px; height: 15px; fill: var(--accent); flex-shrink: 0; }
+    .contact-row.wa svg { fill: #25d366; }
+    .contact-row span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* Tags cloud */
+    .tags-cloud { display: flex; flex-wrap: wrap; gap: 6px; }
+
+    .cloud-tag {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      font-weight: 500;
+      transition: background 0.15s;
+      cursor: default;
+    }
+
+    .cloud-tag:hover { background: var(--accent); color: white; }
+
+    /* Education */
+    .edu-row { display: flex; gap: 12px; align-items: flex-start; }
+
+    .edu-dot {
+      width: 10px; height: 10px;
+      background: var(--accent);
+      border-radius: 50%;
+      margin-top: 6px;
+      flex-shrink: 0;
+    }
+
+    .edu-name { font-size: 0.85rem; font-weight: 700; color: var(--text); }
+    .edu-school { font-size: 0.78rem; color: var(--muted); margin-top: 1px; }
+    .edu-year { font-size: 0.74rem; color: var(--accent); font-weight: 600; margin-top: 3px; }
+
+    /* References */
+    .ref-row {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .ref-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .ref-row:first-child { padding-top: 0; }
+
+    .ref-name { font-size: 0.84rem; font-weight: 700; color: var(--text); }
+    .ref-role { font-size: 0.76rem; color: var(--muted); margin: 1px 0 4px; }
+    .ref-link { font-size: 0.76rem; color: var(--accent); }
+    .ref-link:hover { text-decoration: underline; }
+
+    /* GitHub CTA */
+    .github-cta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--code-bg);
+      border-radius: 12px;
+      padding: 18px 20px;
+      text-decoration: none;
+      transition: transform 0.2s;
+      border: 1px solid rgba(167,139,250,0.3);
+    }
+
+    .github-cta:hover { transform: translateY(-2px); text-decoration: none; }
+    .github-cta svg { width: 28px; height: 28px; fill: var(--accent2); flex-shrink: 0; }
+    .github-cta-text strong { display: block; font-size: 0.85rem; color: var(--accent2); }
+    .github-cta-text span { font-size: 0.75rem; color: rgba(255,255,255,0.4); }
+
+    /* ── FOOTER ───────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 24px;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    footer code {
+      font-family: 'Courier New', monospace;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* ── RESPONSIVE ───────────────────────────────────── */
+    @media (max-width: 680px) {
+      .layout { grid-template-columns: 1fr; }
+      .hero-inner { flex-direction: column; gap: 20px; text-align: center; }
+      .hero-links { justify-content: center; }
+      .topbar-nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <nav class="topbar">
+    <div class="topbar-brand">&lt;<span>carlos</span>.dev /&gt;</div>
+    <div class="topbar-nav">
+      <a href="#sobre-mi">Sobre mí</a>
+      <a href="#experiencia">Experiencia</a>
+      <a href="#habilidades">Habilidades</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="avatar">CM</div>
+      <div class="hero-text">
+        <div class="hero-eyebrow">// Tecnólogo en Desarrollo de Software</div>
+        <h1 class="hero-name">Carlos <em>Montesdeoca</em></h1>
+        <p class="hero-bio">
+          Desarrollador full-stack con experiencia en APIs REST, CRMs y sistemas de gestión empresarial.
+          Apasionado por resolver problemas complejos con soluciones limpias y escalables.
+        </p>
+        <div class="hero-links">
+          <a class="hero-link" href="mailto:carlos_andre_mg@outlook.com">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            carlos_andre_mg@outlook.com
+          </a>
+          <a class="hero-link whatsapp" href="https://wa.me/593978885465" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            WhatsApp
+          </a>
+          <a class="hero-link" href="https://www.linkedin.com/in/carlos-montesdeoca-437357241" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14m-.5 15.5v-5.3a3.26 3.26 0 00-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 011.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 001.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 00-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+            LinkedIn
+          </a>
+          <a class="hero-link" href="https://github.com/CarlosMontesdeoca" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M12 2A10 10 0 002 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0012 2z"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- LAYOUT -->
+  <div class="layout">
+
+    <!-- MAIN -->
+    <main>
+
+      <!-- SOBRE MÍ -->
+      <div class="section" id="sobre-mi">
+        <div class="section-header">
+          <span class="section-tag">// about</span>
+          <div class="section-line"></div>
+        </div>
+        <div class="about-card">
+          <p>
+            Soy un desarrollador de software con base en <strong>Quito, Ecuador</strong>, formado en la
+            <a href="https://www.epn.edu.ec" target="_blank" rel="noopener">Escuela Politécnica Nacional</a>.
+            Me especializo en el desarrollo de aplicaciones web, APIs REST y sistemas de gestión empresarial.
+          </p>
+          <br>
+          <p>
+            Me considero una persona con firme decisión — no me gusta rendirme ni conformarme con
+            un único camino para resolver un problema. Creo que el éxito llega al abrir la mente
+            y explorar múltiples soluciones.
+          </p>
+        </div>
+      </div>
+
+      <!-- EXPERIENCIA -->
+      <div class="section" id="experiencia">
+        <div class="section-header">
+          <span class="section-tag">// experiencia</span>
+          <div class="section-line"></div>
+        </div>
+
+        <!-- Metropolitan Touring (actual) -->
+        <div class="post-card">
+          <div class="post-meta">
+            <span class="post-date">ago 2024 → actualidad</span>
+            <span class="post-dot">·</span>
+            <span class="post-badge current">● Actual</span>
+            <span class="post-badge">Full-time</span>
+          </div>
+          <div class="post-title">Programador</div>
+          <div class="post-company">
+            <a href="https://www.metropolitan-touring.com" target="_blank" rel="noopener">Metropolitan Touring</a>
+          </div>
+          <ul class="post-list">
+            <li>Desarrollo y mantenimiento de sistemas internos de gestión turística</li>
+            <li>Implementación de APIs REST con <strong>C# / .NET 8</strong></li>
+            <li>Trabajo con arquitectura por capas: Controllers → Supervisors → Repositories</li>
+            <li>Integración con servicios Azure (Key Vault, App Service, Storage)</li>
+            <li>Gestión de base de datos con <strong>SQL Server</strong> y Entity Framework Core</li>
+          </ul>
+          <div class="post-tags">
+            <span class="ptag">C#</span>
+            <span class="ptag">.NET 8</span>
+            <span class="ptag">SQL Server</span>
+            <span class="ptag">Azure</span>
+            <span class="ptag">API REST</span>
+            <span class="ptag">OData</span>
+          </div>
+        </div>
+
+        <!-- Precitrol -->
+        <div class="post-card">
+          <div class="post-meta">
+            <span class="post-date">abr 2022 → ago 2024</span>
+            <span class="post-dot">·</span>
+            <span class="post-badge">Full-time</span>
+          </div>
+          <div class="post-title">Analista de Sistemas · Desarrollador y Soporte</div>
+          <div class="post-company">Precisión y Control — Precitrol S.A.</div>
+          <ul class="post-list">
+            <li>Desarrollo del <strong>SGO</strong> (Sistema Gestor Operativo): clientes, metrología, cotizador y comisiones</li>
+            <li>Diseño y desarrollo de <strong>API REST</strong> para integración de módulos internos</li>
+            <li>Desarrollo de <strong>CRM</strong> para gestión de relaciones con clientes</li>
+            <li>Automatización de procesos y flujos internos</li>
+            <li>Supervisión de proyectos bajo <strong>metodología Scrum</strong></li>
+            <li>Análisis de datos, gestión de bases de datos y <strong>Web Máster</strong></li>
+            <li>Sistema auditado y certificado bajo norma <strong>ISO 17025:2017</strong></li>
+          </ul>
+          <div class="post-tags">
+            <span class="ptag">PHP</span>
+            <span class="ptag">Laravel</span>
+            <span class="ptag">JavaScript</span>
+            <span class="ptag">SQL Server</span>
+            <span class="ptag">API REST</span>
+            <span class="ptag">Scrum</span>
+          </div>
+        </div>
+
+        <!-- Precitrol pasante -->
+        <div class="post-card">
+          <div class="post-meta">
+            <span class="post-date">nov 2021 → abr 2022</span>
+            <span class="post-dot">·</span>
+            <span class="post-badge">Pasantía</span>
+          </div>
+          <div class="post-title">Analista de Sistemas · Pasante</div>
+          <div class="post-company">Precisión y Control — Precitrol S.A.</div>
+          <ul class="post-list">
+            <li>Levantamiento de requerimientos y análisis de sistemas existentes</li>
+            <li>Mantenimiento lógico y físico de equipos informáticos</li>
+            <li>Manejo y control de inventario tecnológico</li>
+          </ul>
+          <div class="post-tags">
+            <span class="ptag">Análisis</span>
+            <span class="ptag">Soporte TI</span>
+            <span class="ptag">Inventario</span>
+          </div>
+        </div>
+
+        <!-- HardCom -->
+        <div class="post-card">
+          <div class="post-meta">
+            <span class="post-date">2016 · 6 meses</span>
+            <span class="post-dot">·</span>
+            <span class="post-badge">Part-time</span>
+          </div>
+          <div class="post-title">Técnico de Campo</div>
+          <div class="post-company">HardCom</div>
+          <ul class="post-list">
+            <li>Instalación de cableado estructurado horizontal</li>
+            <li>Manejo y control de inventario de equipos</li>
+          </ul>
+          <div class="post-tags">
+            <span class="ptag">Redes</span>
+            <span class="ptag">Cableado</span>
+            <span class="ptag">Hardware</span>
+          </div>
+        </div>
+
+        <!-- Certificado -->
+        <div class="post-card">
+          <div class="post-meta">
+            <span class="post-date">2024</span>
+            <span class="post-dot">·</span>
+            <span class="post-badge cert">Certificado</span>
+          </div>
+          <div class="post-title">Ley Orgánica de Protección de Datos Personales (LOPDP)</div>
+          <div class="post-company">Bi Solutions</div>
+          <ul class="post-list">
+            <li>Normativa ecuatoriana de protección de datos personales</li>
+            <li>Principios, derechos y obligaciones del responsable del tratamiento de datos</li>
+          </ul>
+          <div class="post-tags">
+            <span class="ptag">LOPDP</span>
+            <span class="ptag">Privacidad</span>
+            <span class="ptag">Cumplimiento normativo</span>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <!-- SKILLS -->
+      <div class="widget" id="habilidades">
+        <div class="widget-title">// skills</div>
+
+        <div class="skill-group-label">Lenguajes</div>
+        <div class="skill-row">
+          <div class="skill-name">JavaScript / TypeScript <span>75%</span></div>
+          <div class="skill-track"><div class="skill-bar" data-pct="75"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-name">PHP <span>73%</span></div>
+          <div class="skill-track"><div class="skill-bar" data-pct="73"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-name">Python <span>60%</span></div>
+          <div class="skill-track"><div class="skill-bar" data-pct="60"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-name">C# <span>65%</span></div>
+          <div class="skill-track"><div class="skill-bar" data-pct="65"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-name">APEX <span>45%</span></div>
+          <div class="skill-track"><div class="skill-bar" data-pct="45"></div></div>
+        </div>
+
+        <div class="skill-group-label">Bases de Datos</div>
+        <div class="skill-row">
+          <div class="skill-name">SQL Server <span>72%</span></div>
+          <div class="skill-track"><div class="skill-bar" data-pct="72"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-name">MySQL <span>68%</span></div>
+          <div class="skill-track"><div class="skill-bar" data-pct="68"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-name">MongoDB <span>60%</span></div>
+          <div class="skill-track"><div class="skill-bar" data-pct="60"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-name">Firebase <span>55%</span></div>
+          <div class="skill-track"><div class="skill-bar" data-pct="55"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-name">Supabase <span>50%</span></div>
+          <div class="skill-track"><div class="skill-bar" data-pct="50"></div></div>
+        </div>
+
+        <div class="skill-group-label">Frameworks</div>
+        <div class="skill-row">
+          <div class="skill-name">Laravel <span>73%</span></div>
+          <div class="skill-track"><div class="skill-bar" data-pct="73"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-name">.NET <span>62%</span></div>
+          <div class="skill-track"><div class="skill-bar" data-pct="62"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-name">React / React Native <span>65%</span></div>
+          <div class="skill-track"><div class="skill-bar" data-pct="65"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-name">Next.js <span>50%</span></div>
+          <div class="skill-track"><div class="skill-bar" data-pct="50"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-name">NestJS <span>45%</span></div>
+          <div class="skill-track"><div class="skill-bar" data-pct="45"></div></div>
+        </div>
+      </div>
+
+      <!-- CONOCIMIENTOS -->
+      <div class="widget">
+        <div class="widget-title">// conocimientos</div>
+        <div class="tags-cloud">
+          <span class="cloud-tag">Diseño UI</span>
+          <span class="cloud-tag">Dev Web</span>
+          <span class="cloud-tag">Apps Móviles</span>
+          <span class="cloud-tag">BD Relacionales</span>
+          <span class="cloud-tag">NoSQL</span>
+          <span class="cloud-tag">API REST</span>
+          <span class="cloud-tag">Scrum</span>
+          <span class="cloud-tag">Azure</span>
+          <span class="cloud-tag">LOPDP</span>
+          <span class="cloud-tag">Redes</span>
+        </div>
+      </div>
+
+      <!-- EDUCACIÓN -->
+      <div class="widget">
+        <div class="widget-title">// educación</div>
+        <div class="edu-row">
+          <div class="edu-dot"></div>
+          <div>
+            <div class="edu-name">Tecnología Superior en Desarrollo de Software</div>
+            <div class="edu-school">
+              <a href="https://www.epn.edu.ec" target="_blank" rel="noopener">Escuela Politécnica Nacional</a>
+              — Quito, Ecuador
+            </div>
+            <div class="edu-year">2017 – 2021</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GITHUB -->
+      <a class="github-cta" href="https://github.com/CarlosMontesdeoca" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M12 2A10 10 0 002 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0012 2z"/></svg>
+        <div class="github-cta-text">
+          <strong>Ver mis proyectos</strong>
+          <span>github.com/CarlosMontesdeoca</span>
+        </div>
+      </a>
+
+      <!-- CONTACTO -->
+      <div class="widget" id="contacto">
+        <div class="widget-title">// contacto</div>
+        <div class="contact-list">
+          <a class="contact-row" href="mailto:carlos_andre_mg@outlook.com">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            <span>carlos_andre_mg@outlook.com</span>
+          </a>
+          <a class="contact-row wa" href="https://wa.me/593978885465" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            <span>097 888 5465 (WhatsApp)</span>
+          </a>
+          <a class="contact-row" href="https://www.linkedin.com/in/carlos-montesdeoca-437357241" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14m-.5 15.5v-5.3a3.26 3.26 0 00-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 011.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 001.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 00-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+            <span>LinkedIn</span>
+          </a>
+          <a class="contact-row" href="https://github.com/CarlosMontesdeoca" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M12 2A10 10 0 002 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0012 2z"/></svg>
+            <span>CarlosMontesdeoca</span>
+          </a>
+          <span class="contact-row" style="cursor:default">
+            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
+            <span>Quito, Ecuador</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- REFERENCIAS -->
+      <div class="widget">
+        <div class="widget-title">// referencias</div>
+        <div class="ref-row">
+          <div class="ref-name">Mgs. Roger Xavier Salazar</div>
+          <div class="ref-role">Analista de Sistemas — PraxMED</div>
+          <a class="ref-link" href="mailto:xaviermil92@hotmail.com">xaviermil92@hotmail.com</a>
+        </div>
+        <div class="ref-row">
+          <div class="ref-name">Jonathan Montesdeoca</div>
+          <div class="ref-role">Analista Telecomunicaciones — Ecuador Tower Company</div>
+          <a class="ref-link" href="mailto:jonathan@ecuadortowercompany.com">jonathan@ecuadortowercompany.com</a>
+        </div>
+        <div class="ref-row">
+          <div class="ref-name">Mgs. Danny Vasconez</div>
+          <div class="ref-role">Responsable de Metrología — Precitrol S.A.</div>
+          <a class="ref-link" href="mailto:metrologisa@precitrol.com">metrologisa@precitrol.com</a>
+        </div>
+      </div>
+
+    </aside>
+  </div>
+
+  <footer>
+    Construido con <code>HTML</code> + <code>CSS</code> + <code>JS</code> puro ·
+    <a href="https://github.com/CarlosMontesdeoca/CarlosMontesdeoca.github.io" target="_blank" rel="noopener">Ver fuente en GitHub</a>
+  </footer>
+
+  <script>
+    const animables = document.querySelectorAll('.post-card, .about-card, .widget');
+    const io = new IntersectionObserver(entries => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => {
+            e.target.classList.add('visible');
+            e.target.querySelectorAll('.skill-bar').forEach(b => {
+              b.style.width = b.dataset.pct + '%';
+            });
+          }, i * 60);
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    animables.forEach(el => io.observe(el));
+
+    const sections = document.querySelectorAll('[id]');
+    const navLinks = document.querySelectorAll('.topbar-nav a');
+    const sio = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          navLinks.forEach(l => l.style.color = '');
+          const link = document.querySelector(`.topbar-nav a[href="#${e.target.id}"]`);
+          if (link) link.style.color = '#a78bfa';
+        }
+      });
+    }, { threshold: 0.6 });
+    sections.forEach(s => sio.observe(s));
+  </script>
+</body>
+</html>
